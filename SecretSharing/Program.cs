@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using SecretSharing.Extensions;
 using SecretSharing.Infrastructure.Data;
 using SecretSharing.Infrastructure.Identity;
 
@@ -14,6 +15,7 @@ builder.Services.AddDbContext<IdentityContext>(opts => {
     opts.UseSqlServer(
     builder.Configuration["ConnectionStrings:DefaultIdentityConnection"]);
 });
+builder.Services.AddApplicationServices();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
