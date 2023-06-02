@@ -16,6 +16,14 @@ builder.Services.AddDbContext<IdentityContext>(opts => {
     builder.Configuration["ConnectionStrings:DefaultIdentityConnection"]);
 });
 builder.Services.AddApplicationServices();
+builder.Services.AddIdentityServices(builder.Configuration);
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("CorsPolicy", policy =>
+    {
+        policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("*");
+    });
+});
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -30,6 +38,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseCors("CorsPolicy");
 
 app.UseHttpsRedirection();
 
