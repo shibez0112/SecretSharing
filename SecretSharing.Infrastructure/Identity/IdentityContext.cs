@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using SecretSharing.Core.Entities.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,7 @@ namespace SecretSharing.Infrastructure.Identity
         public IdentityContext(DbContextOptions<IdentityContext> options) : base(options)
         {
         }
+        public DbSet<AppUser> AppUsers { get; set; }
         protected IdentityContext()
         {
         }

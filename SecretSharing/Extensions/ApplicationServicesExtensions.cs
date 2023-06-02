@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SecretSharing.Application.CustomServices;
+using SecretSharing.Core.Interfaces;
 using SecretSharing.Errors;
 using SecretSharing.Infrastructure.Data;
+
 
 namespace SecretSharing.Extensions
 {
@@ -9,6 +12,7 @@ namespace SecretSharing.Extensions
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
             services.AddScoped<StoreContext, StoreContext>();
+            services.AddScoped<ITokenService, TokenService>();
             services.Configure<ApiBehaviorOptions>(options => 
             options.InvalidModelStateResponseFactory = ActionContext =>
             {
