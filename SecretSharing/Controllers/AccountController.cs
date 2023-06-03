@@ -46,5 +46,20 @@ namespace SecretSharing.Controllers
                 Token = _tokenServices.GenerateToken(user)
             };
         }
+
+        [HttpPost(nameof(Login))]
+        public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
+        {
+            var user = await _userManager.FindByEmailAsync(loginDto.Email);
+            if (user == null) return Unauthorized(new APIResponse(401));
+
+            var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
+            if (!result.Succeeded) return Unauthorized(new APIResponse(401));
+            return new UserDto
+            {
+                Email = user.Email,
+                Token = _tokenServices.GenerateToken(user)
+            };
+        }
     }
 }
