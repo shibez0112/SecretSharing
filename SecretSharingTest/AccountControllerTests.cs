@@ -1,45 +1,18 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Moq;
-using SecretSharing.Controllers;
-using SecretSharing.Core.Entities.Identity;
-using SecretSharing.Core.Interfaces;
-using SecretSharing.Dtos;
+﻿using SecretSharing.Dtos;
+using SecretSharing.Test;
+using System.Net.Http.Json;
 
 namespace SecretSharingTest
 {
     public class AccountControllerTests
     {
-        private readonly Mock<ITokenService> tokenService;
-        private readonly Mock<UserManager<AppUser>> userManager;
-        private readonly Mock<SignInManager<AppUser>> signInManager;
+
+        private readonly TestApplication _application;
+        private readonly HttpClient _client;
         public AccountControllerTests()
         {
-            tokenService = new Mock<ITokenService>();
-
-            userManager = new Mock<UserManager<AppUser>>(
-                new Mock<IUserStore<AppUser>>().Object,
-                new Mock<IOptions<IdentityOptions>>().Object,
-                new Mock<IPasswordHasher<AppUser>>().Object,
-                new IUserValidator<AppUser>[0],
-                new IPasswordValidator<AppUser>[0],
-                new Mock<ILookupNormalizer>().Object,
-                new Mock<IdentityErrorDescriber>().Object,
-                new Mock<IServiceProvider>().Object,
-                new Mock<ILogger<UserManager<AppUser>>>().Object);
-
-            signInManager = new Mock<SignInManager<AppUser>>(
-                userManager.Object,
-                new Mock<IHttpContextAccessor>().Object,
-                new Mock<IUserClaimsPrincipalFactory<AppUser>>().Object,
-                new Mock<IOptions<IdentityOptions>>().Object,
-                new Mock<ILogger<SignInManager<AppUser>>>().Object,
-                new Mock<IAuthenticationSchemeProvider>().Object,
-                null);
+            _application = new TestApplication();
+            _client = _application.CreateClient();
         }
 
         [Fact]
@@ -52,53 +25,112 @@ namespace SecretSharingTest
                 Password = "To@n0112",
             };
 
-            userManager
-                .Setup(userManager => userManager.CreateAsync(It.IsAny<AppUser>(), It.IsAny<string>()))
-                .Returns(Task.FromResult(IdentityResult.Success));
-
-
-            var accountController = new AccountController(signInManager.Object, userManager.Object, tokenService.Object);
-
             // Act
-            var registerResult = await accountController.Register(user);
+            var response = await _client.PostAsJsonAsync("/api/Account/register", user);
+            var result = await response.Content.ReadFromJsonAsync<UserDto>();
 
             // Assert
-            Assert.NotNull(registerResult);
-            Assert.Equal("ginta2888@gmail.com", registerResult.Value.Email);
+            Assert.True(response.IsSuccessStatusCode);
+            Assert.NotNull(result);
 
         }
 
         [Fact]
-        public async void Register_Failed_Create_User()
+        public async void Register_Failed_Existing_Email()
         {
             // Arrange
             var user = new RegisterDto
             {
                 Email = "ginta2888@gmail.com",
-                Password = "Toan0112",
+                Password = "To@n0112",
             };
 
-            userManager
-                .Setup(userManager => userManager.CreateAsync(It.IsAny<AppUser>(), It.IsAny<string>()))
-                .Returns(Task.FromResult(IdentityResult.Failed(new IdentityError { Description = "Failed to register user" })));
-
-
-            var accountController = new AccountController(signInManager.Object, userManager.Object, tokenService.Object);
-
             // Act
-            var registerResult = await accountController.Register(user);
+            var response = await _client.PostAsJsonAsync("/api/Account/register", user);
 
             // Assert
-            Assert.NotNull(registerResult);
-            // Assert that the response is a BadRequestObjectResult
-            Assert.IsType<BadRequestObjectResult>(registerResult.Result);
+            Assert.False(response.IsSuccessStatusCode);
+
+        }
+
+        [Fact]
+        public async void Register_Failed_Simple_Password()
+        {
+            // Arrange
+            var user = new RegisterDto
+            {
+                Email = "ginta2777@gmail.com",
+                Password = "Toan",
+            };
+
+            // Act
+            var response = await _client.PostAsJsonAsync("/api/Account/register", user);
+
+            // Assert
+            Assert.False(response.IsSuccessStatusCode);
+
+        }
+
+        [Fact]
+        public async void Login_Failed_Non_Existing_User()
+        {
+            // Arrange
+            var user = new LoginDto
+            {
+                Email = "ginta2777@gmail.com",
+                Password = "Toan",
+            };
+
+            // Act
+            var response = await _client.PostAsJsonAsync("/api/Account/login", user);
+
+            // Assert
+            Assert.False(response.IsSuccessStatusCode);
+
+        }
+
+        [Fact]
+        public async void Login_Success()
+        {
+            // Arrange
+            var user = new LoginDto
+            {
+                Email = "ginta2888@gmail.com",
+                Password = "To@n0112",
+            };
+
+            // Act
+            var response = await _client.PostAsJsonAsync("/api/Account/login", user);
+            var result = await response.Content.ReadFromJsonAsync<UserDto>();
+
+            // Assert
+            Assert.True(response.IsSuccessStatusCode);
+            Assert.NotNull(result);
+
+        }
+
+        [Fact]
+        public async void Login_Failed_Wrong_Password()
+        {
+            // Arrange
+            var user = new RegisterDto
+            {
+                Email = "ginta2888@gmail.com",
+                Password = "To@n011",
+            };
+
+            // Act
+            var response = await _client.PostAsJsonAsync("/api/Account/register", user);
+
+
+            // Assert
+            Assert.False(response.IsSuccessStatusCode);
+
 
         }
 
 
     }
-
-
 
 
 }

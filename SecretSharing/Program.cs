@@ -6,12 +6,14 @@ using SecretSharing.Infrastructure.Identity;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddDbContext<StoreContext>(opts => {
+builder.Services.AddDbContext<StoreContext>(opts =>
+{
     opts.UseSqlServer(
     builder.Configuration["ConnectionStrings:DefaultConnection"]);
 
 });
-builder.Services.AddDbContext<IdentityContext>(opts => {
+builder.Services.AddDbContext<IdentityContext>(opts =>
+{
     opts.UseSqlServer(
     builder.Configuration["ConnectionStrings:DefaultIdentityConnection"]);
 });
@@ -47,3 +49,6 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+// For intergration testing
+public partial class Program { }
