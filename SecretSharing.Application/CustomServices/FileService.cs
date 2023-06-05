@@ -38,5 +38,17 @@ namespace SecretSharing.Application.CustomServices
             return await _unitOfWork.repository<UserFile>().ListAsync(spec);
         }
 
+        public async Task<bool> DeleteFileAsync(string fileId)
+        {
+            await _unitOfWork.repository<UserFile>().DeleteByIdAsync(fileId);
+            var result = await _unitOfWork.Complete();
+            if (result <= 0)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
     }
 }

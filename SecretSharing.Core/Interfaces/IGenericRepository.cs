@@ -7,7 +7,8 @@ namespace SecretSharing.Core.Interfaces
         void Add(T entity);
         void Delete(T entity);
         Task<IReadOnlyList<T>> GetAllAsync();
-        Task<T> GetByIdAsync(int id);
+        Task<T> GetByIdAsync(string id);
         Task<IReadOnlyList<T>> ListAsync(ISpecification<T> spec);
+        Task<bool> DeleteByIdAsync(string id);
     }
 }

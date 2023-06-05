@@ -42,5 +42,17 @@ namespace SecretSharing.Controllers
             return Ok(files);
 
         }
+
+        [Authorize]
+        [HttpDelete(nameof(DeleteUserFile))]
+        public async Task<ActionResult<bool>> DeleteUserFile(string fileId)
+        {
+            var deleteFile = await FileService.DeleteFileAsync(fileId);
+            if (deleteFile == false)
+            {
+                return BadRequest(new APIResponse(400, "Something went Wrong"));
+            }
+            return Ok();
+        }
     }
 }

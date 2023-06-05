@@ -27,16 +27,35 @@ namespace SecretSharing.Infrastructure.Repositories
             }
         }
 
-        public async Task<T> GetByIdAsync(int id)
+        public async Task<T> GetByIdAsync(string id)
         {
             try
             {
-                return await _storeContext.Set<T>().FindAsync(id);
+                return await _storeContext.Set<T>().FindAsync(new Guid(id));
             }
             catch (Exception)
             {
                 throw;
             }
+        }
+
+        public async Task<bool> DeleteByIdAsync(string id)
+        {
+            try
+            {
+                var entity = await GetByIdAsync(id);
+                if (entity != null)
+                {
+                    Delete(entity);
+                    return true;
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            return false;
         }
 
         public void Add(T entity)
@@ -57,5 +76,6 @@ namespace SecretSharing.Infrastructure.Repositories
         {
             return SpecificationEvaluateOr<T>.GetQuery(_storeContext.Set<T>().AsQueryable(), specifications);
         }
+
     }
 }
