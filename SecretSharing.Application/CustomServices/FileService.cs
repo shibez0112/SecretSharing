@@ -1,6 +1,7 @@
 ﻿using SecretSharing.Core.Dtos;
 using SecretSharing.Core.Entities;
 using SecretSharing.Core.Interfaces;
+using SecretSharing.Core.Specifications;
 
 namespace SecretSharing.Application.CustomServices
 {
@@ -29,6 +30,12 @@ namespace SecretSharing.Application.CustomServices
             }
 
             return uploadedUserFile.Id.ToString();
+        }
+
+        public async Task<IReadOnlyList<UserFile>> GetFilesForUserAsync(string userId)
+        {
+            var spec = new FileWithSpecification(userId);
+            return await _unitOfWork.repository<UserFile>().ListAsync(spec);
         }
 
     }

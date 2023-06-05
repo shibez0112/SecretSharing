@@ -44,7 +44,7 @@ namespace SecretSharing.Application.CustomServices
 
             }
 
-            fileDto.Url = uploadResult.Uri.ToString();
+            fileDto.Url = uploadResult.Url.ToString();
             fileDto.PublicId = uploadResult.PublicId;
 
             var resultFile = new UserFile
