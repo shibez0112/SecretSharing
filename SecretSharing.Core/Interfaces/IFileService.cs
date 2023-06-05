@@ -8,5 +8,6 @@ namespace SecretSharing.Application.CustomServices
         Task<String> UploadFile(string userId, FileDto fileDto, bool isAutoDeleted);
         Task<IReadOnlyList<UserFile>> GetFilesForUserAsync(string userId);
         Task<bool> DeleteFileAsync(string fileId);
+        Task<string> AccessFileAsync(string fileId);
     }
 }

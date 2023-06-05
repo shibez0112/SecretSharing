@@ -14,7 +14,7 @@ namespace SecretSharing.Extensions
             services.AddScoped<StoreContext, StoreContext>();
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IFileService, FileService>();
-            services.AddScoped<IFileUploadService, FileUploadService>();
+            services.AddScoped<ICloudinaryServices, CloudinaryServices>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.Configure<ApiBehaviorOptions>(options =>

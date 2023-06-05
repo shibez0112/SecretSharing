@@ -3,7 +3,7 @@ using SecretSharing.Core.Entities;
 
 namespace SecretSharing.Core.Interfaces
 {
-    public interface IFileUploadService
+    public interface ICloudinaryServices
     {
         UserFile UploadUserFile(string userId, FileDto fileDto, bool isAutoDeleted);
     }

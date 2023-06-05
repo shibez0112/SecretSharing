@@ -7,13 +7,13 @@ using SecretSharing.Core.Interfaces;
 
 namespace SecretSharing.Application.CustomServices
 {
-    public class FileUploadService : IFileUploadService
+    public class CloudinaryServices : ICloudinaryServices
     {
         private readonly IConfiguration _configuration;
         private readonly CloudinarySettings _cloudinarySettings;
         private readonly Cloudinary _cloudinary;
 
-        public FileUploadService(IConfiguration configuration)
+        public CloudinaryServices(IConfiguration configuration)
         {
             _configuration = configuration;
             // Get Cloudinary config into model using binder
@@ -57,6 +57,7 @@ namespace SecretSharing.Application.CustomServices
 
             return resultFile;
         }
-    }
 
+    }
 }
+
