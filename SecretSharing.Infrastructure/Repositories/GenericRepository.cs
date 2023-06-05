@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SecretSharing.Core.Interfaces;
+using SecretSharing.Core.Specifications;
 using SecretSharing.Infrastructure.Data;
 
 namespace SecretSharing.Infrastructure.Repositories
@@ -46,6 +47,15 @@ namespace SecretSharing.Infrastructure.Repositories
         public void Delete(T entity)
         {
             _storeContext.Set<T>().Remove(entity);
+        }
+        public async Task<IReadOnlyList<T>> ListAsync(ISpecification<T> specification)
+        {
+            return await ApplySpecification(specification).ToListAsync();
+
+        }
+        private IQueryable<T> ApplySpecification(ISpecification<T> specifications)
+        {
+            return SpecificationEvaluateOr<T>.GetQuery(_storeContext.Set<T>().AsQueryable(), specifications);
         }
     }
 }

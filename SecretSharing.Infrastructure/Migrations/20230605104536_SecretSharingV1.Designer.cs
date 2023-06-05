@@ -12,7 +12,7 @@ using SecretSharing.Infrastructure.Data;
 namespace SecretSharing.Infrastructure.Migrations
 {
     [DbContext(typeof(StoreContext))]
-    [Migration("20230605092202_SecretSharingV1")]
+    [Migration("20230605104536_SecretSharingV1")]
     partial class SecretSharingV1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
