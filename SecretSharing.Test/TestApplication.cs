@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using SecretSharing.Infrastructure.Data;
-using SecretSharing.Infrastructure.Identity;
 
 namespace SecretSharing.Test
 {
@@ -24,13 +23,9 @@ namespace SecretSharing.Test
                     if (!_databaseInitialized)
                     {
                         services.RemoveAll(typeof(DbContextOptions<StoreContext>));
-                        services.RemoveAll(typeof(DbContextOptions<IdentityContext>));
 
                         services.AddDbContext<StoreContext>(options =>
                             options.UseInMemoryDatabase("Testing", DatabaseRoot));
-
-                        services.AddDbContext<IdentityContext>(options =>
-                            options.UseInMemoryDatabase("TestingIdentity", DatabaseRoot));
 
                         // Perform any additional database initialization, if needed
 
