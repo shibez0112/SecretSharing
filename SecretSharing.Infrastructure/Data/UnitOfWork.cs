@@ -4,7 +4,7 @@ using System.Collections;
 
 namespace SecretSharing.Infrastructure.Data
 {
-    public class UnitOfWork
+    public class UnitOfWork : IUnitOfWork
     {
         private readonly StoreContext _storeContext;
         private Hashtable _repositories;

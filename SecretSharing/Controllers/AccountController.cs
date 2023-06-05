@@ -20,6 +20,7 @@ namespace SecretSharing.Controllers
             _userManager = userManager;
             _tokenServices = tokenServices;
         }
+
         [HttpGet("emailexists")]
         public async Task<ActionResult<bool>> CheckEmailExistAsync([FromQuery] string Email)
         {
