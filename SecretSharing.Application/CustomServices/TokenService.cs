@@ -3,10 +3,8 @@ using Microsoft.IdentityModel.Tokens;
 using SecretSharing.Core.Entities.Identity;
 using SecretSharing.Core.Interfaces;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace SecretSharing.Application.CustomServices
 {
@@ -23,7 +21,8 @@ namespace SecretSharing.Application.CustomServices
         {
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Email, appUser.Email)
+                new Claim(ClaimTypes.Email, appUser.Email),
+                new Claim(ClaimTypes.NameIdentifier, appUser.Id),
             };
             var credential = new SigningCredentials(_Key, SecurityAlgorithms.HmacSha256);
             var TokenDesc = new SecurityTokenDescriptor

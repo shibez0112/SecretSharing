@@ -1,8 +1,8 @@
-﻿using SecretSharing.Core.Entities.Identity;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
-using SecretSharing.Infrastructure.Identity;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using SecretSharing.Core.Entities.Identity;
+using SecretSharing.Infrastructure.Identity;
 using System.Text;
 
 namespace SecretSharing.Extensions

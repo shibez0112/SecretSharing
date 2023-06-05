@@ -3,7 +3,7 @@ using SecretSharing.Application.CustomServices;
 using SecretSharing.Core.Interfaces;
 using SecretSharing.Errors;
 using SecretSharing.Infrastructure.Data;
-
+using SecretSharing.Infrastructure.Repositories;
 
 namespace SecretSharing.Extensions
 {
@@ -13,7 +13,11 @@ namespace SecretSharing.Extensions
         {
             services.AddScoped<StoreContext, StoreContext>();
             services.AddScoped<ITokenService, TokenService>();
-            services.Configure<ApiBehaviorOptions>(options => 
+            services.AddScoped<IFileService, FileService>();
+            services.AddScoped<IFileUploadService, FileUploadService>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            services.Configure<ApiBehaviorOptions>(options =>
             options.InvalidModelStateResponseFactory = ActionContext =>
             {
                 var error = ActionContext.ModelState

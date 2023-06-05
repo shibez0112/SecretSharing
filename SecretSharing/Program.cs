@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using SecretSharing.ExceptionMiddleware;
 using SecretSharing.Extensions;
 using SecretSharing.Infrastructure.Data;
 using SecretSharing.Infrastructure.Identity;
@@ -17,7 +18,9 @@ builder.Services.AddDbContext<IdentityContext>(opts =>
     opts.UseSqlServer(
     builder.Configuration["ConnectionStrings:DefaultIdentityConnection"]);
 });
+builder.Services.AddControllers();
 builder.Services.AddApplicationServices();
+builder.Services.AddSwaggerDocumentation();
 builder.Services.AddIdentityServices(builder.Configuration);
 builder.Services.AddCors(options =>
 {
@@ -32,6 +35,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -42,11 +46,15 @@ if (app.Environment.IsDevelopment())
 }
 app.UseCors("CorsPolicy");
 
+app.UseMiddleware<ExceptionMiddle>();
 app.UseHttpsRedirection();
-
+app.UseRouting();
+app.UseAuthentication();
 app.UseAuthorization();
-
-app.MapControllers();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+});
 
 app.Run();
 
