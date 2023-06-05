@@ -12,6 +12,7 @@ builder.Services.AddDbContext<StoreContext>(opts =>
     builder.Configuration["ConnectionStrings:DefaultConnection"]);
 
 });
+builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddControllers();
 builder.Services.AddApplicationServices();
 builder.Services.AddSwaggerDocumentation();

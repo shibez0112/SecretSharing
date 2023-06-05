@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SecretSharing.Application.CustomServices;
 using SecretSharing.Core.Dtos;
 using SecretSharing.Core.Entities;
+using SecretSharing.Dtos;
 using SecretSharing.Errors;
 using SecretSharing.Extensions;
 
@@ -13,9 +15,13 @@ namespace SecretSharing.Controllers
     public class FileController : BaseApiController
     {
         public IFileService FileService;
-        public FileController(IFileService fileService)
+        private readonly IMapper _mapper;
+
+
+        public FileController(IFileService fileService, IMapper mapper)
         {
             FileService = fileService;
+            _mapper = mapper;
         }
 
         [Authorize]
@@ -35,11 +41,12 @@ namespace SecretSharing.Controllers
 
         [Authorize]
         [HttpGet(nameof(ListUserFile))]
-        public async Task<ActionResult<UserFile>> ListUserFile()
+        public async Task<ActionResult<UserFileDto>> ListUserFile()
         {
             var userId = HttpContext.User.RetrieveIdFromPrincipal();
             var files = await FileService.GetFilesForUserAsync(userId);
-            return Ok(files);
+            var resultFile = _mapper.Map<IReadOnlyList<UserFile>, IReadOnlyList<UserFileDto>>(files);
+            return Ok(resultFile);
 
         }
 
