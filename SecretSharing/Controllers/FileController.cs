@@ -61,5 +61,17 @@ namespace SecretSharing.Controllers
             }
             return Ok();
         }
+
+        [AllowAnonymous]
+        [HttpGet(nameof(AccessUserFile))]
+        public async Task<ActionResult<string>> AccessUserFile(string fileId)
+        {
+            var file = await FileService.AccessFileAsync(fileId);
+            if (file == null)
+            {
+                return BadRequest(new APIResponse(400, "Something went Wrong"));
+            }
+            return Ok(file);
+        }
     }
 }

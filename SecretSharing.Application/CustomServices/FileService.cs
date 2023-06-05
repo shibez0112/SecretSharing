@@ -8,17 +8,17 @@ namespace SecretSharing.Application.CustomServices
     public class FileService : IFileService
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IFileUploadService _fileUploadService;
+        private readonly ICloudinaryServices _cloudinaryService;
 
-        public FileService(IUnitOfWork unitOfWork, IFileUploadService fileUploadService)
+        public FileService(IUnitOfWork unitOfWork, ICloudinaryServices cloudinaryService)
         {
             _unitOfWork = unitOfWork;
-            _fileUploadService = fileUploadService;
+            _cloudinaryService = cloudinaryService;
         }
 
         public async Task<String> UploadFile(string userId, FileDto fileDto, bool isAutoDeleted)
         {
-            var uploadedUserFile = _fileUploadService.UploadUserFile(userId, fileDto, isAutoDeleted);
+            var uploadedUserFile = _cloudinaryService.UploadUserFile(userId, fileDto, isAutoDeleted);
             if (uploadedUserFile != null)
             {
                 _unitOfWork.repository<UserFile>().Add(uploadedUserFile);
@@ -48,6 +48,23 @@ namespace SecretSharing.Application.CustomServices
             }
 
             return true;
+        }
+
+        public async Task<string> AccessFileAsync(string fileId)
+        {
+            var result = await _unitOfWork.repository<UserFile>().GetByIdAsync(fileId);
+            if (result != null)
+            {
+                var url = result.Url;
+                if (result.IsAutoDeleted)
+                {
+                    await _unitOfWork.repository<UserFile>().DeleteByIdAsync(fileId);
+                    await _unitOfWork.Complete();
+                }
+                return url;
+            }
+            return null;
+
         }
 
     }
