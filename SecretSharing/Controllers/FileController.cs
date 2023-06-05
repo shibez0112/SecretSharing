@@ -26,7 +26,7 @@ namespace SecretSharing.Controllers
 
         [Authorize]
         [HttpPost(nameof(UploadFile))]
-        public async Task<ActionResult<UserFile>> UploadFile(IFormFile file, bool isAutoDeleted)
+        public async Task<ActionResult<string>> UploadFile(IFormFile file, bool isAutoDeleted)
         {
             var userId = HttpContext.User.RetrieveIdFromPrincipal();
             var fileDto = new FileDto { File = file };
