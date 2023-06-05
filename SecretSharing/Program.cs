@@ -2,7 +2,6 @@ using Microsoft.EntityFrameworkCore;
 using SecretSharing.ExceptionMiddleware;
 using SecretSharing.Extensions;
 using SecretSharing.Infrastructure.Data;
-using SecretSharing.Infrastructure.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,11 +11,6 @@ builder.Services.AddDbContext<StoreContext>(opts =>
     opts.UseSqlServer(
     builder.Configuration["ConnectionStrings:DefaultConnection"]);
 
-});
-builder.Services.AddDbContext<IdentityContext>(opts =>
-{
-    opts.UseSqlServer(
-    builder.Configuration["ConnectionStrings:DefaultIdentityConnection"]);
 });
 builder.Services.AddControllers();
 builder.Services.AddApplicationServices();

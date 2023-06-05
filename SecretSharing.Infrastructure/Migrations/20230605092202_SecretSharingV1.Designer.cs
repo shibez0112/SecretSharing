@@ -5,15 +5,15 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using SecretSharing.Infrastructure.Identity;
+using SecretSharing.Infrastructure.Data;
 
 #nullable disable
 
-namespace SecretSharing.Infrastructure.Migrations.Identity
+namespace SecretSharing.Infrastructure.Migrations
 {
-    [DbContext(typeof(IdentityContext))]
-    [Migration("20230602035826_IdentityV2")]
-    partial class IdentityV2
+    [DbContext(typeof(StoreContext))]
+    [Migration("20230605092202_SecretSharingV1")]
+    partial class SecretSharingV1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -228,6 +228,58 @@ namespace SecretSharing.Infrastructure.Migrations.Identity
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("SecretSharing.Core.Entities.UserFile", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("AppUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("IsAutoDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("PublicId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppUserId");
+
+                    b.ToTable("UserFiles");
+                });
+
+            modelBuilder.Entity("SecretSharing.Core.Entities.UserText", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("AppUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsAutoDeleted")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppUserId");
+
+                    b.ToTable("UserTexts");
+                });
+
             modelBuilder.Entity("SecretSharing.Core.Entities.Identity.AppUser", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
@@ -284,6 +336,35 @@ namespace SecretSharing.Infrastructure.Migrations.Identity
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("SecretSharing.Core.Entities.UserFile", b =>
+                {
+                    b.HasOne("SecretSharing.Core.Entities.Identity.AppUser", "AppUser")
+                        .WithMany("UserFiles")
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AppUser");
+                });
+
+            modelBuilder.Entity("SecretSharing.Core.Entities.UserText", b =>
+                {
+                    b.HasOne("SecretSharing.Core.Entities.Identity.AppUser", "AppUser")
+                        .WithMany("UserTexts")
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AppUser");
+                });
+
+            modelBuilder.Entity("SecretSharing.Core.Entities.Identity.AppUser", b =>
+                {
+                    b.Navigation("UserFiles");
+
+                    b.Navigation("UserTexts");
                 });
 #pragma warning restore 612, 618
         }

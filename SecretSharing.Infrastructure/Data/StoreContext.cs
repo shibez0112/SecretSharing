@@ -1,18 +1,23 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using SecretSharing.Core.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using SecretSharing.Core.Entities.Identity;
 
 namespace SecretSharing.Infrastructure.Data
 {
-    public class StoreContext: DbContext
+    public class StoreContext : IdentityDbContext
     {
-        public StoreContext(DbContextOptions<StoreContext> options): base(options) { }
+        public StoreContext(DbContextOptions<StoreContext> options) : base(options) { }
+        public DbSet<AppUser> AppUser { get; set; }
         public DbSet<UserFile> UserFiles { get; set; }
         public DbSet<UserText> UserTexts { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+
+            base.OnModelCreating(builder);
+
+        }
 
     }
 }

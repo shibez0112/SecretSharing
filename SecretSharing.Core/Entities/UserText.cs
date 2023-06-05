@@ -1,11 +1,6 @@
 ﻿using SecretSharing.Core.Entities.Identity;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SecretSharing.Core.Entities
 {
@@ -17,7 +12,7 @@ namespace SecretSharing.Core.Entities
         public string Content { get; set; }
         public bool IsAutoDeleted { get; set; }
 
-        [Required]
+        [ForeignKey("AppUser")]
         public string AppUserId { get; set; }
         public AppUser AppUser { get; set; }
     }

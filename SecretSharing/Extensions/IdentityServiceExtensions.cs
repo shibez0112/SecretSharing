@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using SecretSharing.Core.Entities.Identity;
-using SecretSharing.Infrastructure.Identity;
+using SecretSharing.Infrastructure.Data;
 using System.Text;
 
 namespace SecretSharing.Extensions
@@ -14,7 +14,7 @@ namespace SecretSharing.Extensions
             var builder = services.AddIdentityCore<AppUser>();
 
             builder = new IdentityBuilder(builder.UserType, builder.Services);
-            builder.AddEntityFrameworkStores<IdentityContext>();
+            builder.AddEntityFrameworkStores<StoreContext>();
             builder.AddSignInManager<SignInManager<AppUser>>();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(
                 options =>
