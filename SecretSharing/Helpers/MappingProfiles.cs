@@ -9,6 +9,7 @@ namespace SecretSharing.Helpers
         public MappingProfiles()
         {
             CreateMap<UserFile, UserFileDto>().ReverseMap();
+            CreateMap<UserText, UserTextDto>().ReverseMap();
         }
     }
 }
