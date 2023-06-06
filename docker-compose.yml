@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  secretsharing:
+    image: ${DOCKER_REGISTRY-}secretsharing
+    build:
+      context: .
+      dockerfile: SecretSharing\Dockerfile
