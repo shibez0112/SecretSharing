@@ -50,9 +50,9 @@ namespace SecretSharing.Controllers
 
         [Authorize]
         [HttpDelete(nameof(DeleteUserText))]
-        public async Task<ActionResult<bool>> DeleteUserText(string fileId)
+        public async Task<ActionResult<bool>> DeleteUserText(string textId)
         {
-            var deleteText = await TextService.DeleteTextAsync(fileId);
+            var deleteText = await TextService.DeleteTextAsync(textId);
             if (deleteText == false)
             {
                 return BadRequest(new APIResponse(400, "Something went Wrong"));
@@ -62,9 +62,9 @@ namespace SecretSharing.Controllers
 
         [AllowAnonymous]
         [HttpGet(nameof(AccessUserText))]
-        public async Task<ActionResult<string>> AccessUserText(string fileId)
+        public async Task<ActionResult<string>> AccessUserText(string textId)
         {
-            var text = await TextService.AccessTextAsync(fileId);
+            var text = await TextService.AccessTextAsync(textId);
             if (text == null)
             {
                 return BadRequest(new APIResponse(400, "Something went Wrong"));
