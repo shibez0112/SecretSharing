@@ -28,14 +28,17 @@ namespace SecretSharing.ExceptionMiddleware
             }
             catch (Exception ex)
             {
+                // Set header
                 _logger.LogError(ex, ex.Message);
                 httpContext.Response.ContentType = "application/json";
                 httpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
 
+                // Check if application is still in dev
                 var response = _hostEnvironment.IsDevelopment() ?
                     new APIException((int)HttpStatusCode.InternalServerError, ex.Message, ex.StackTrace.ToString())
                     : new APIException((int)HttpStatusCode.InternalServerError);
 
+                // Create new error as json and send
                 var options = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
                 var json = JsonSerializer.Serialize(response, options);
 

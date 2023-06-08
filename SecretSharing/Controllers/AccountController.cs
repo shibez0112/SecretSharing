@@ -30,15 +30,18 @@ namespace SecretSharing.Controllers
         [HttpPost(nameof(Register))]
         public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
         {
+            // Check email exist
             if (CheckEmailExistAsync(registerDto.Email).Result.Value)
             {
                 return BadRequest(new APIValidationErrorResponse { Errors = new[] { "Email is already in use" } });
             }
+            // Create new user to register
             var user = new AppUser
             {
                 Email = registerDto.Email,
                 UserName = registerDto.Email
             };
+            // Add new user to DB and return result
             var result = await _userManager.CreateAsync(user, registerDto.Password);
             if (!result.Succeeded) return BadRequest(new APIResponse(400));
             return new UserDto
@@ -51,9 +54,11 @@ namespace SecretSharing.Controllers
         [HttpPost(nameof(Login))]
         public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
         {
+            // Check if user exists
             var user = await _userManager.FindByEmailAsync(loginDto.Email);
             if (user == null) return Unauthorized(new APIResponse(401));
 
+            // Check user password and return result
             var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
             if (!result.Succeeded) return Unauthorized(new APIResponse(401));
             return new UserDto

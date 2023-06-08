@@ -11,6 +11,7 @@ namespace SecretSharing.Extensions
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
+            // Register services's lifecycle
             services.AddScoped<StoreContext, StoreContext>();
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IFileService, FileService>();
@@ -18,6 +19,7 @@ namespace SecretSharing.Extensions
             services.AddScoped<ICloudinaryServices, CloudinaryServices>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            // Handling invalid model state errors
             services.Configure<ApiBehaviorOptions>(options =>
             options.InvalidModelStateResponseFactory = ActionContext =>
             {

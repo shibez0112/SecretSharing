@@ -13,6 +13,7 @@ namespace SecretSharing.Application.CustomServices
         private readonly CloudinarySettings _cloudinarySettings;
         private readonly Cloudinary _cloudinary;
 
+        // Initialize account using Cloudinary API
         public CloudinaryServices(IConfiguration configuration)
         {
             _configuration = configuration;
@@ -27,10 +28,12 @@ namespace SecretSharing.Application.CustomServices
 
         public UserFile UploadUserFile(string userId, FileDto fileDto, bool isAutoDeleted)
         {
+            // Get file from controller
             var file = fileDto.File;
 
             var uploadResult = new RawUploadResult();
 
+            // Check if it is a mutiple fille
             if (file.Length > 0)
             {
                 using (var stream = file.OpenReadStream())
@@ -39,6 +42,7 @@ namespace SecretSharing.Application.CustomServices
                     {
                         File = new FileDescription(file.Name, stream)
                     };
+                    // Upload to cloudinary
                     uploadResult = _cloudinary.Upload(uploadParams);
                 }
 
@@ -47,6 +51,7 @@ namespace SecretSharing.Application.CustomServices
             fileDto.Url = uploadResult.Url.ToString();
             fileDto.PublicId = uploadResult.PublicId;
 
+            // Return result after successfully upload
             var resultFile = new UserFile
             {
                 Url = fileDto.Url,

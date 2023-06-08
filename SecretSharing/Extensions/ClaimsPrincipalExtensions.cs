@@ -2,6 +2,7 @@
 
 namespace SecretSharing.Extensions
 {
+    // Extension that help retrive data using claim
     public static class ClaimsPrincipalExtensions
     {
         public static string RetrieveIdFromPrincipal(this ClaimsPrincipal User)

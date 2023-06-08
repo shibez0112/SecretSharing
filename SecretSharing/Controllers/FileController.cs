@@ -28,9 +28,12 @@ namespace SecretSharing.Controllers
         [HttpPost(nameof(UploadFile))]
         public async Task<ActionResult<string>> UploadFile(IFormFile file, bool isAutoDeleted)
         {
+            // Get user's id from claim
             var userId = HttpContext.User.RetrieveIdFromPrincipal();
+            // Create file information 
             var fileDto = new FileDto { File = file };
             var uploadedFile = await FileService.UploadFile(userId, fileDto, isAutoDeleted);
+            // Return error if upload not success
             if (uploadedFile == null)
             {
                 return BadRequest(new APIResponse(400, "Something went Wrong"));
@@ -43,8 +46,11 @@ namespace SecretSharing.Controllers
         [HttpGet(nameof(ListUserFile))]
         public async Task<ActionResult<UserFileDto>> ListUserFile()
         {
+            // Get user's id from claim
             var userId = HttpContext.User.RetrieveIdFromPrincipal();
+            // Get files for user
             var files = await FileService.GetFilesForUserAsync(userId);
+            // Map and return result
             var resultFile = _mapper.Map<IReadOnlyList<UserFile>, IReadOnlyList<UserFileDto>>(files);
             return Ok(resultFile);
 

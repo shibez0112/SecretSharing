@@ -4,6 +4,7 @@ using SecretSharing.Dtos;
 
 namespace SecretSharing.Helpers
 {
+    // AutoMapper config for mapping objects
     public class MappingProfiles : Profile
     {
         public MappingProfiles()

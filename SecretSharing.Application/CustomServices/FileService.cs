@@ -52,10 +52,12 @@ namespace SecretSharing.Application.CustomServices
 
         public async Task<string> AccessFileAsync(string fileId)
         {
+            // Check if file exists
             var result = await _unitOfWork.repository<UserFile>().GetByIdAsync(fileId);
             if (result != null)
             {
                 var url = result.Url;
+                // If file is mark as deleted after access
                 if (result.IsAutoDeleted)
                 {
                     await _unitOfWork.repository<UserFile>().DeleteByIdAsync(fileId);

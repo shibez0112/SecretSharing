@@ -27,6 +27,7 @@ namespace SecretSharing.Controllers
         [HttpPost(nameof(UploadText))]
         public async Task<ActionResult<string>> UploadText(string content, bool isAutoDeleted)
         {
+            // Get user's id from claim
             var userId = HttpContext.User.RetrieveIdFromPrincipal();
             var uploadedText = await TextService.UploadText(userId, content, isAutoDeleted);
             if (uploadedText == null)
@@ -41,6 +42,7 @@ namespace SecretSharing.Controllers
         [HttpGet(nameof(ListUserText))]
         public async Task<ActionResult<UserFileDto>> ListUserText()
         {
+            // Get user's id from claim
             var userId = HttpContext.User.RetrieveIdFromPrincipal();
             var texts = await TextService.GetTextsForUserAsync(userId);
             var resultTexts = _mapper.Map<IReadOnlyList<UserText>, IReadOnlyList<UserTextDto>>(texts);

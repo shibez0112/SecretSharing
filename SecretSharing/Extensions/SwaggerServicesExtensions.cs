@@ -10,7 +10,7 @@ namespace SecretSharing.Extensions
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
                 {
-                    Title = "Skinet",
+                    Title = "SecretSharing",
                     Version = "v1"
                 });
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()

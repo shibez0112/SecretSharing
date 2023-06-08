@@ -21,6 +21,7 @@ namespace SecretSharing.Infrastructure.Data
         {
             _storeContext.Dispose();
         }
+        // Dynamically create Repository instances based on entity type
         public IGenericRepository<TEntity> repository<TEntity>() where TEntity : class
         {
             if (_repositories == null) { _repositories = new Hashtable(); }

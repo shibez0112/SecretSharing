@@ -15,10 +15,12 @@ namespace SecretSharing.Application.CustomServices
         public TokenService(IConfiguration configuration)
         {
             _configuration = configuration;
+            // Get the secret key in appsetings.json
             _Key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Token:Key"]));
         }
         public string GenerateToken(AppUser appUser)
         {
+            // Create new claims include user'data
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Email, appUser.Email),
@@ -34,6 +36,7 @@ namespace SecretSharing.Application.CustomServices
                 Issuer = _configuration["Token:Issuer"],
             };
             var tokenhandler = new JwtSecurityTokenHandler();
+            // Sign the data with signing algorithm
             var token = tokenhandler.CreateToken(TokenDesc);
             return tokenhandler.WriteToken(token);
         }

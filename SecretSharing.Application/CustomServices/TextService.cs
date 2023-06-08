@@ -19,6 +19,7 @@ namespace SecretSharing.Application.CustomServices
             if (result != null)
             {
                 var content = result.Content;
+                // If text is mark as deleted after access
                 if (result.IsAutoDeleted)
                 {
                     await _unitOfWork.repository<UserText>().DeleteByIdAsync(textId);
